@@ -23,7 +23,7 @@ const projectsList: Project[] = [
     defaultTitle: "SAKANCA ESCAPE × GEWD VACATION CITY TOUR",
     defaultDesc:
       "City Tour hasil kolaborasi Sakanca Escape × Gewd Vacation menyusuri spot tersembunyi diluar dari jalan Malioboro. Mulai dari kuliner hingga hidden gems tempat yang tidak banyak orang kunjungi.",
-    image: "/images/project/Escape.jpeg",
+    image: "/images/project/Escape.webp",
     category: "Sakanca Escape",
   },
   {
@@ -33,7 +33,7 @@ const projectsList: Project[] = [
     defaultTitle: "SAKANCA TECH CUSTOM PC BUILD",
     defaultDesc:
       "Merakit komputer desktop sesuai kebutuhan pengguna dengan memperhatikan performa, estetika, dan manajemen kabel. Proyek ini mencakup pemasangan seluruh komponen, konfigurasi hardware, optimalisasi airflow, serta pengujian sistem untuk memastikan komputer berjalan stabil dan siap digunakan.",
-    image: "/images/project/CustomPC.jpeg",
+    image: "/images/project/CustomPC.webp",
     category: "Sakanca Tech",
   },
   {
@@ -43,7 +43,7 @@ const projectsList: Project[] = [
     defaultTitle: "SAKANCA TECH LAPTOP MAINTENANCE",
     defaultDesc:
       "Melakukan pembongkaran laptop untuk proses pembersihan, penggantian thermal paste, upgrade komponen seperti SSD dan RAM, serta pemeriksaan kondisi hardware. Setiap perangkat diuji kembali setelah perawatan guna memastikan performa meningkat dan sistem bekerja secara optimal.",
-    image: "/images/project/LaptopMaintenance.jpeg",
+    image: "/images/project/LaptopMaintenance.webp",
     category: "Sakanca Tech",
   },
   {
@@ -53,7 +53,7 @@ const projectsList: Project[] = [
     defaultTitle: "JUARA 2 LOMBA PORSIMAPTAR 2025",
     defaultDesc:
       "juara 2 lomba videografi yang diadakan oleh akademi kepolisian semarang pada tahun 2025 tingkat nasional",
-    image: "/images/project/Porsimaptar.png",
+    image: "/images/project/Porsimaptar.webp",
     category: "Sakanca Visual",
   },
   {
@@ -63,7 +63,7 @@ const projectsList: Project[] = [
     defaultTitle: "Sugi AC Mobil",
     defaultDesc:
       "Sugi AC Mobil adalah website company profile yang menampilkan informasi layanan servis AC mobil, galeri, testimoni, dan kontak untuk memudahkan pelanggan mengenal bisnis serta melakukan konsultasi. Website ini dibangun menggunakan Next.js, TypeScript, dan Tailwind CSS dengan deployment di Vercel, sehingga menghasilkan tampilan modern, responsif, cepat, dan SEO-friendly.",
-    image: "/images/project/SugiAcMobil.jpeg",
+    image: "/images/project/SugiAcMobil.webp",
     category: "Sakanca Dev",
   },
   {
@@ -73,7 +73,7 @@ const projectsList: Project[] = [
     defaultTitle: "C Minor",
     defaultDesc:
       "C Minor adalah website landing page yang dirancang untuk menyampaikan informasi mengenai komunitas secara profesional melalui desain yang sederhana, responsif, dan mudah digunakan. Website ini dikembangkan menggunakan HTML, CSS, dan JavaScript, kemudian dideploy menggunakan Vercel sehingga memiliki performa yang ringan dan mudah diakses dari berbagai perangkat.",
-    image: "/images/project/CMinor.jpeg",
+    image: "/images/project/CMinor.webp",
     category: "Sakanca Dev",
   },
   {
@@ -83,7 +83,7 @@ const projectsList: Project[] = [
     defaultTitle: "Lomba Video Kreatif UNISBA 2026",
     defaultDesc:
       "Lomba Video Kreatif yang di adakan oleh Universitas Islam Bandung Tahun 2026. Maya Rasa menceritakan tentang seorang perantau yang terjebak dalam judi online hingga menghabiskan uang yang dimilikinya. Saat keadaan mulai sulit, ia berusaha bertahan hidup dengan mencari pekerjaan di perantauan dan kembali menemukan semangat untuk bangkit.",
-    image: "/images/project/MayaRasa.jpeg",
+    image: "/images/project/MayaRasa.webp",
     category: "Sakanca Visual",
   },
   {
@@ -93,7 +93,7 @@ const projectsList: Project[] = [
     defaultTitle: "Lomba Video Pendek BNN 2025",
     defaultDesc:
       "Lomba Video Pendek yang di adakan oleh Badan Narkotika Nasional Tahun 2025. Ruang Silam menceritakan sepenggak realita anak muda yang dihadapkan oleh ujung skripsi dan patah hati, sehingga hampir tersesat ke narkoba hingga suara ibu membawanya pulang",
-    image: "/images/project/BNN.jpeg",
+    image: "/images/project/BNN.webp",
     category: "Sakanca Visual",
   },
   {
@@ -103,7 +103,7 @@ const projectsList: Project[] = [
     defaultTitle: "TOP 5 Motor Matic 150cc Terbaik 2026 – Versi Sakanca Auto!",
     defaultDesc:
       "Pembuatan Video mengenai motor : Mencari motor matic 150cc yang tepat untuk kebutuhan harian maupun hobi di tahun 2026? Di video kali ini, kami telah mengurasi 5 pilihan motor matic kelas 150cc terbaik versi Sakanca Auto. Kami membahas keunggulan performa, desain, dan fitur-fitur yang membuat kelima motor ini layak menjadi pilihan utama bagi kamu tahun ini. ",
-    image: "/images/project/KelasMatic.jpeg",
+    image: "/images/project/KelasMatic.webp",
     category: "Sakanca Auto",
   },
   {
@@ -113,7 +113,7 @@ const projectsList: Project[] = [
     defaultTitle: "Juara 2 Lomba Videografi Bioleaf UNS Tahun 2025",
     defaultDesc:
       "Juara 2 Lomba Videografi yang diselenggarakan oleh HMP Biosfer FKIP UNS : BIOLEAF Tahun 2025.",
-    image: "/images/project/Bioleaf.png",
+    image: "/images/project/Bioleaf.webp",
     category: "Sakanca Visual",
   },
 ];
@@ -145,7 +145,7 @@ export default function ProjectSection() {
       id="project"
       className="w-full min-h-screen py-24 flex flex-col items-center justify-center select-none relative overflow-hidden"
       style={{
-        backgroundImage: "url('/images/project/Porsimaptar.png')",
+        backgroundImage: "url('/images/project/Porsimaptar.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",

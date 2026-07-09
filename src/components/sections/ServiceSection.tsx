@@ -11,7 +11,7 @@ const servicesList = [
     id: "visual",
     nameKey: "service_visual",
     icon: Camera,
-    image: "/images/logo/logoSakancaVisual.png",
+    image: "/images/logo/logoSakancaVisual.webp",
     color: "from-amber-400 to-orange-500",
     col: "left",
   },
@@ -19,7 +19,7 @@ const servicesList = [
     id: "auto",
     nameKey: "service_auto",
     icon: Car,
-    image: "/images/logo/logoSakancaAuto.png",
+    image: "/images/logo/logoSakancaAuto.webp",
     color: "from-blue-400 to-indigo-600",
     col: "right",
   },
@@ -27,7 +27,7 @@ const servicesList = [
     id: "escape",
     nameKey: "service_escape",
     icon: Compass,
-    image: "/images/logo/logoSakancaEscape.png",
+    image: "/images/logo/logoSakancaEscape.webp",
     color: "from-emerald-400 to-teal-600",
     col: "left",
   },
@@ -35,7 +35,7 @@ const servicesList = [
     id: "tech",
     nameKey: "service_tech",
     icon: Cpu,
-    image: "/images/logo/logoSakancaTech.png",
+    image: "/images/logo/logoSakancaTech.webp",
     color: "from-cyan-400 to-blue-500",
     col: "right",
   },
@@ -43,7 +43,7 @@ const servicesList = [
     id: "dev",
     nameKey: "service_dev",
     icon: Code,
-    image: "/images/logo/logoSakancadev.png",
+    image: "/images/logo/logoSakancadev.webp",
     color: "from-pink-500 to-purple-600",
     col: "left",
   },
@@ -51,7 +51,7 @@ const servicesList = [
     id: "pet",
     nameKey: "service_pet",
     icon: Heart,
-    image: "/images/logo/logoSakancaPet.png",
+    image: "/images/logo/logoSakancaPet.webp",
     color: "from-rose-400 to-red-500",
     col: "right",
   },
@@ -85,7 +85,7 @@ export default function ServicesSection() {
     >
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
-          src="/images/background/Gallery/Gallery1.jpg"
+          src="/images/background/Gallery/Gallery1.webp"
           alt="Background"
           fill
           className="object-cover opacity-85"

@@ -7,19 +7,19 @@ import { ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const images = [
-  "/images/background/Gallery/Gallery1.jpg",
-  "/images/background/Gallery/Gallery2.jpg",
-  "/images/background/Gallery/Gallery3.jpg",
-  "/images/background/Gallery/Gallery4.jpg",
-  "/images/background/Gallery/Gallery5.jpg",
-  "/images/background/Gallery/Gallery6.jpg",
-  "/images/background/Gallery/Gallery7.jpg",
-  "/images/background/Gallery/Gallery8.jpg",
-  "/images/background/Gallery/Gallery9.jpg",
-  "/images/background/Gallery/Gallery10.jpg",
-  "/images/background/Gallery/Gallery11.jpg",
-  "/images/background/Gallery/Gallery12.jpg",
-  "/images/background/Gallery/Gallery13.jpg",
+  "/images/background/Gallery/Gallery1.webp",
+  "/images/background/Gallery/Gallery2.webp",
+  "/images/background/Gallery/Gallery3.webp",
+  "/images/background/Gallery/Gallery4.webp",
+  "/images/background/Gallery/Gallery5.webp",
+  "/images/background/Gallery/Gallery6.webp",
+  "/images/background/Gallery/Gallery7.webp",
+  "/images/background/Gallery/Gallery8.webp",
+  "/images/background/Gallery/Gallery9.webp",
+  "/images/background/Gallery/Gallery10.webp",
+  "/images/background/Gallery/Gallery11.webp",
+  "/images/background/Gallery/Gallery12.webp",
+  "/images/background/Gallery/Gallery13.webp",
 ];
 
 const variants = {

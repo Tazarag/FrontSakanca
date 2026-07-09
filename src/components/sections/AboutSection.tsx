@@ -32,7 +32,9 @@ export default function About() {
       id="about"
       ref={sectionRef}
       className="w-full min-h-screen flex flex-col justify-center px-8 md:px-24 py-20 overflow-hidden bg-cover bg-center bg-no-repeat relative"
-      style={{ backgroundImage: "url('/images/background/About/bgAbout.jpg')" }}
+      style={{
+        backgroundImage: "url('/images/background/About/bgAbout.webp')",
+      }}
     >
       <div className="absolute inset-0 bg-linear-to-b from-black/90 via-[#0c1947]/50 to-black/95 z-0"></div>
       <div className="max-w-6xl mx-auto w-full relative z-10 mt-16 md:mt-24">
@@ -42,7 +44,7 @@ export default function About() {
             style={{ animationDelay: isVisible ? "200ms" : "0ms" }}
           >
             <Image
-              src="/images/logo/logoSakanca.png"
+              src="/images/logo/logoSakanca.webp"
               alt="Sakanca Logo"
               width={256}
               height={256}

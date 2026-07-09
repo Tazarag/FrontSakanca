@@ -45,7 +45,7 @@ export default function Navbar() {
           <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl border border-white/15 shadow-sm">
             {/* PASTIKAN GAMBAR INI ADA DI public/images/logos/ */}
             <Image
-              src="/images/logo/logoSakanca.png"
+              src="/images/logo/logoSakanca.webp"
               alt="Sakanca Alliance Logo"
               fill
               className="object-cover"

@@ -5,17 +5,17 @@ import { useEffect, useState } from "react";
 
 const slides = [
   {
-    src: "/images/background/Hero/bgHero1.jpg",
+    src: "/images/background/Hero/bgHero1.webp",
     alt: "Background 1",
     zoomType: "in",
   },
   {
-    src: "/images/background/Hero/bgHero2.jpg",
+    src: "/images/background/Hero/bgHero2.webp",
     alt: "Background 2",
     zoomType: "out",
   },
   {
-    src: "/images/background/Hero/bgHero3.jpg",
+    src: "/images/background/Hero/bgHero3.webp",
     alt: "Background 3",
     zoomType: "in",
   },
