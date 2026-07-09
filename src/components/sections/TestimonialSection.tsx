@@ -11,60 +11,60 @@ import { useLanguage } from "@/context/LanguageContext";
 
 interface Testimonial {
   id: number;
-  text: string;
-  author: string;
+  content: string;
+  client_name: string;
   rating: number;
 }
 
 const baseTestimonials: Omit<Testimonial, "id">[] = [
   {
-    text: "Tampilan web-nya classy banget! Flow-nya enak, navigasi dari halaman ke halaman mulus. Baru kali ini nemu web yang desainnya senyaman ini.",
-    author: "@EdyPamungkas",
+    content: "Tampilan web-nya classy banget! Flow-nya enak, navigasi dari halaman ke halaman mulus. Baru kali ini nemu web yang desainnya senyaman ini.",
+    client_name: "@EdyPamungkas",
     rating: 5,
   },
   {
-    text: "Gacorr, ini web loading-nya cepet banget! Fitur-fitur yang ada di dalamnya juga fungsional dan nggak bikin bingung. Developer-nya juara sih.",
-    author: "@Baktisakti",
+    content: "Gacorr, ini web loading-nya cepet banget! Fitur-fitur yang ada di dalamnya juga fungsional dan nggak bikin bingung. Developer-nya juara sih.",
+    client_name: "@Baktisakti",
     rating: 5,
   },
   {
-    text: "Suka banget sama interface-nya. Modern dan minimalis, bener-bener enak dilihat lama lama. User experiencenya dapet banget, nggak bikin pusing.",
-    author: "@Br4mast4",
+    content: "Suka banget sama interface-nya. Modern dan minimalis, bener-bener enak dilihat lama lama. User experiencenya dapet banget, nggak bikin pusing.",
+    client_name: "@Br4mast4",
     rating: 4,
   },
   {
-    text: "awalnya buka web di desktop trus pas buka webnya di mobile, tampilannya tetep rapi. Responsive nya jempolan, nggak ada elemen yang kepotong. Mantap banget buat dev nya",
-    author: "@citradwi",
+    content: "awalnya buka web di desktop trus pas buka webnya di mobile, tampilannya tetep rapi. Responsive nya jempolan, nggak ada elemen yang kepotong. Mantap banget buat dev nya",
+    client_name: "@citradwi",
     rating: 5,
   },
   {
-    text: "Struktur data di web ini rapi ya, mau cari info apa aja gampang ketemu. Backendnya kayaknya solid banget karena nggak pernah kerasa lag.",
-    author: "@Sari4330",
+    content: "Struktur data di web ini rapi ya, mau cari info apa aja gampang ketemu. Backendnya kayaknya solid banget karena nggak pernah kerasa lag.",
+    client_name: "@Sari4330",
     rating: 5,
   },
   {
-    text: "Desainnya estetik, pemilihan font sama warnanya bikin web ini kelihatan mahal. Clean banget, beda sama web lain yang terlalu ramai setuju banget sama yg kaya ginii",
-    author: "@Dikaprazz",
+    content: "Desainnya estetik, pemilihan font sama warnanya bikin web ini kelihatan mahal. Clean banget, beda sama web lain yang terlalu ramai setuju banget sama yg kaya ginii",
+    client_name: "@Dikaprazz",
     rating: 5,
   },
   {
-    text: "Pelayanan dari sistem webnya bagus, proses dari awal sampai bagian web paling akhir cepet banget nggak ada error. Problem solving-nya bener-bener dipikirin.",
-    author: "@Kurniaa_fian",
+    content: "Pelayanan dari sistem webnya bagus, proses dari awal sampai bagian web paling akhir cepet banget nggak ada error. Problem solving-nya bener-bener dipikirin.",
+    client_name: "@Kurniaa_fian",
     rating: 4,
   },
   {
-    text: "Fitur pencariannya akurat. Sering banget pakai web ini buat cari refrensi, dan sejauh ini performanya stabil banget. Sangat membantu produktivitas guee",
-    author: "@DanielDiJakarta",
+    content: "Fitur pencariannya akurat. Sering banget pakai web ini buat cari refrensi, dan sejauh ini performanya stabil banget. Sangat membantu produktivitas guee",
+    client_name: "@DanielDiJakarta",
     rating: 5,
   },
   {
-    text: "Integrasi datanya cepet banget, update an terbaru selalu sinkron. Bener-bener terstruktur, pengerjaannya pasti niat banget nih yang buat.",
-    author: "@indahPratiwi",
+    content: "Integrasi datanya cepet banget, update an terbaru selalu sinkron. Bener-bener terstruktur, pengerjaannya pasti niat banget nih yang buat.",
+    client_name: "@indahPratiwi",
     rating: 5,
   },
   {
-    text: "Tampilannya simpel tapi fungsional. Jarang nemu web yang UI nya seintuitif ini. Overall, sangat memuaskan buat pengalaman pengguna kayak gue",
-    author: "@ahmdHad1",
+    content: "Tampilannya simpel tapi fungsional. Jarang nemu web yang UI nya seintuitif ini. Overall, sangat memuaskan buat pengalaman pengguna kayak gue",
+    client_name: "@ahmdHad1",
     rating: 5,
   },
 ];
