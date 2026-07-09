@@ -200,10 +200,10 @@ export default function TestimoniSection() {
               <p
                 className={`text-center text-sm sm:text-base font-semibold leading-relaxed mb-6 ${textColor}`}
               >
-                {testimoni.text}
+                {testimoni.content}
               </p>
               <div className={`text-center font-bold mb-4 ${textColor}`}>
-                {testimoni.author}
+                {testimoni.client_name}
               </div>
               {/* Stars */}
               <div className="flex justify-center gap-1 mt-2">
