@@ -5,22 +5,8 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-
-const images = [
-  "/images/background/Gallery/Gallery1.webp",
-  "/images/background/Gallery/Gallery2.webp",
-  "/images/background/Gallery/Gallery3.webp",
-  "/images/background/Gallery/Gallery4.webp",
-  "/images/background/Gallery/Gallery5.webp",
-  "/images/background/Gallery/Gallery6.webp",
-  "/images/background/Gallery/Gallery7.webp",
-  "/images/background/Gallery/Gallery8.webp",
-  "/images/background/Gallery/Gallery9.webp",
-  "/images/background/Gallery/Gallery10.webp",
-  "/images/background/Gallery/Gallery11.webp",
-  "/images/background/Gallery/Gallery12.webp",
-  "/images/background/Gallery/Gallery13.webp",
-];
+import { useGalleryItems } from "@/hooks/useGallery";
+import { resolveImage } from "@/lib/api";
 
 const variants = {
   enter: (isOdd: boolean) => ({
@@ -46,34 +32,61 @@ const variants = {
 };
 
 export default function GalleryPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { data: galleryItems, isLoading, error } = useGalleryItems();
   const [[page, direction], setPage] = useState([0, 0]);
 
-  const imageIndex = Math.abs(page % images.length);
+  const slides = (galleryItems ?? [])
+    .slice()
+    .sort((a, b) => a.order - b.order)
+    .flatMap((item) =>
+      item.images.map((img) => ({
+        src: resolveImage(img.src),
+        alt: img.alt,
+        kicker: item.text_kicker[language],
+        title: item.title[language],
+        subtitle: item.subtitle[language],
+      })),
+    );
+
+  const imageIndex = slides.length > 0 ? Math.abs(page % slides.length) : 0;
   const isOddPhoto = (imageIndex + 1) % 2 !== 0;
+  const currentSlide = slides[imageIndex];
 
   const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection]);
   };
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      paginate(1);
-    }, 3000);
+    if (slides.length === 0) return;
+    const timer = setInterval(() => paginate(1), 3000);
     return () => clearInterval(timer);
-  }, [page]);
+  }, [page, slides.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") {
-        paginate(1);
-      } else if (e.key === "ArrowLeft") {
-        paginate(-1);
-      }
+      if (e.key === "ArrowRight") paginate(1);
+      else if (e.key === "ArrowLeft") paginate(-1);
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [page]);
+
+  if (isLoading) {
+    return (
+      <section className="w-full h-screen bg-black flex items-center justify-center">
+        <p className="text-white/50">Memuat...</p>
+      </section>
+    );
+  }
+
+  if (error || slides.length === 0) {
+    return (
+      <section className="w-full h-screen bg-black flex items-center justify-center">
+        <p className="text-red-400">Gagal memuat galeri.</p>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -92,11 +105,10 @@ export default function GalleryPage() {
             className="absolute inset-0 w-full h-full"
           >
             <Image
-              src={images[imageIndex]}
-              alt={`Sakanca Gallery - Photo ${imageIndex + 1}`}
+              src={currentSlide.src}
+              alt={currentSlide.alt}
               fill
               className="object-cover"
-              priority
               sizes="100vw"
             />
           </motion.div>
@@ -111,23 +123,23 @@ export default function GalleryPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-xs uppercase tracking-widest text-teal-400 font-semibold mb-2 block lang-text"
         >
-          {t("gallery_journey")}
+          {currentSlide.kicker}
         </motion.span>
-        <motion.h1
+        <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="text-3xl md:text-5xl font-black tracking-tight text-white mb-2 uppercase lang-text"
         >
-          {t("gallery_title")}
-        </motion.h1>
+          {currentSlide.title}
+        </motion.h2>
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
           className="text-neutral-300 text-sm md:text-base leading-relaxed line-clamp-2 lang-text"
         >
-          {t("gallery_desc")}
+          {currentSlide.subtitle}
         </motion.p>
       </div>
 
@@ -151,7 +163,7 @@ export default function GalleryPage() {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-4">
         <div className="bg-black/60 backdrop-blur-md border border-white/10 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-teal-400 shadow-lg">
           {imageIndex + 1} <span className="text-white/40">/</span>{" "}
-          {images.length}
+          {slides.length}
         </div>
 
         <div className="flex justify-center gap-3">

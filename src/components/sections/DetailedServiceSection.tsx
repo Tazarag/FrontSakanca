@@ -3,84 +3,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
-  Camera,
-  Compass,
-  Code,
-  Car,
-  Cpu,
-  Heart,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-
-const servicesDetailList = [
-  {
-    id: "visual",
-    name: "Sakanca Visual",
-    titleLine1: "S A K A N C A",
-    titleLine2: "V I S U A L",
-    icon: Camera,
-    image: "/images/logo/logoSakancaVisual.webp",
-    bgImage: "/images/det/detVisual.webp",
-    color: "from-amber-400 to-orange-500",
-  },
-  {
-    id: "auto",
-    name: "Sakanca Auto",
-    titleLine1: "S A K A N C A",
-    titleLine2: "    A U T O",
-    icon: Car,
-    image: "/images/logo/logoSakancaAuto.webp",
-    bgImage: "/images/det/detAuto.webp",
-    color: "from-blue-400 to-indigo-600",
-  },
-  {
-    id: "escape",
-    name: "Sakanca Escape",
-    titleLine1: "S A K A N C A",
-    titleLine2: "E S C A P E",
-    icon: Compass,
-    image: "/images/logo/logoSakancaEscape.webp",
-    bgImage: "/images/det/detEscape.webp",
-    color: "from-emerald-400 to-teal-600",
-  },
-  {
-    id: "tech",
-    name: "Sakanca Tech",
-    titleLine1: "S A K A N C A",
-    titleLine2: "T E C H",
-    icon: Cpu,
-    image: "/images/logo/logoSakancaTech.webp",
-    bgImage: "/images/det/detTech.webp",
-    color: "from-cyan-400 to-blue-500",
-  },
-  {
-    id: "dev",
-    name: "Sakanca Dev",
-    titleLine1: "S A K A N C A",
-    titleLine2: "D E V",
-    icon: Code,
-    image: "/images/logo/logoSakancadev.webp",
-    bgImage: "/images/det/detDev.webp",
-    color: "from-pink-500 to-purple-600",
-  },
-  {
-    id: "pet",
-    name: "Sakanca Pet",
-    titleLine1: "S A K A N C A",
-    titleLine2: "P E T",
-    icon: Heart,
-    image: "/images/logo/logoSakancaPet.webp",
-    bgImage: "/images/det/detPet.webp",
-    color: "from-rose-400 to-red-500",
-  },
-];
+import { useServices } from "@/hooks/useServices";
+import { useDetailedServices } from "@/hooks/useDetailedService";
+import { getServiceUiMeta } from "@/lib/serviceUiMeta";
+import { resolveImage } from "@/lib/api";
 
 export default function DetailedServicesSection() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { data: services } = useServices();
+  const { data: detailedServices, isLoading, error } = useDetailedServices();
   const [activeIndex, setActiveIndex] = useState(0);
   const [bgIndex, setBgIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
@@ -97,10 +34,27 @@ export default function DetailedServicesSection() {
       },
       { threshold: 0.15 },
     );
-
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
+
+  const servicesDetailList = (detailedServices ?? [])
+    .slice()
+    .sort((a, b) => a.order - b.order)
+    .map((ds) => {
+      const service = services?.find((s) => s.id === ds.service_id);
+      const meta = service ? getServiceUiMeta(service) : undefined;
+      return {
+        id: String(ds.id),
+        name: service?.name ?? "",
+        titleLine1: ds.title_line1,
+        titleLine2: ds.title_line2,
+        icon: meta?.icon,
+        image: service?.logo ? resolveImage(service.logo) : "",
+        bgImage: resolveImage(ds.background_image),
+        description: ds.description[language],
+      };
+    });
 
   useEffect(() => {
     const handleSelectSlide = (e: Event) => {
@@ -129,6 +83,22 @@ export default function DetailedServicesSection() {
     handleSlideChange(
       (activeIndex - 1 + servicesDetailList.length) % servicesDetailList.length,
     );
+
+  if (isLoading) {
+    return (
+      <section className="w-full min-h-screen flex items-center justify-center bg-[#0a1334]">
+        <p className="text-white/50">Memuat...</p>
+      </section>
+    );
+  }
+
+  if (error || servicesDetailList.length === 0) {
+    return (
+      <section className="w-full min-h-screen flex items-center justify-center bg-[#0a1334]">
+        <p className="text-red-400">Gagal memuat detail layanan.</p>
+      </section>
+    );
+  }
 
   const activeService = servicesDetailList[activeIndex];
   const ActiveIcon = activeService.icon;
@@ -183,7 +153,9 @@ export default function DetailedServicesSection() {
               ) : (
                 <div className="flex flex-col items-center justify-center w-full h-full p-4">
                   <div className="p-4 rounded-2xl bg-slate-50 text-[#0a1334] shadow-sm transform group-hover:scale-110 transition-transform duration-300">
-                    <ActiveIcon className="w-8 h-8 sm:w-10 sm:h-10 text-[#0a1334]" />
+                    {ActiveIcon && (
+                      <ActiveIcon className="w-8 h-8 sm:w-10 sm:h-10 text-[#0a1334]" />
+                    )}
                   </div>
                   <span className="text-[#0a1334]/50 font-bold text-xs sm:text-sm tracking-wider uppercase mt-4">
                     Logo
@@ -198,7 +170,7 @@ export default function DetailedServicesSection() {
           className={`max-w-4xl mx-auto w-full mb-8 transition-all ${animate ? "opacity-100 translate-y-0 blur-none duration-[900ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] [transition-delay:1600ms]" : "opacity-0 translate-y-16 blur-[4px] duration-[250ms] ease-in"}`}
         >
           <p className="text-gray-300/90 text-sm sm:text-base md:text-lg leading-[2.2] text-center font-medium tracking-[0.1em] px-4 sm:px-8 lang-text">
-            {t(`det_${activeService.id}`)}
+            {activeService.description}
           </p>
         </div>
 
@@ -231,7 +203,7 @@ export default function DetailedServicesSection() {
         {/* Navigation Buttons */}
         <div className="mt-20 flex flex-col sm:flex-row items-center justify-center gap-6 pb-20 relative z-20">
           <a
-            href="#home"
+            href="#services"
             className="group w-max px-6 py-3.5 flex items-center justify-center gap-2 bg-transparent hover:bg-white/10 text-white font-bold rounded-xl border border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 cursor-pointer text-xs sm:text-sm tracking-widest uppercase backdrop-blur-sm"
           >
             <ChevronUp
@@ -241,7 +213,7 @@ export default function DetailedServicesSection() {
             <span className="lang-text">{t("btn_back")}</span>
           </a>
           <a
-            href="#services"
+            href="#project"
             className="group w-max px-6 py-3.5 flex items-center justify-center gap-2 bg-[#1c64ff] hover:bg-[#1c64ff]/90 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(28,100,255,0.3)] hover:shadow-[0_0_30px_rgba(28,100,255,0.5)] transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 cursor-pointer text-xs sm:text-sm tracking-widest uppercase"
           >
             <ChevronDown

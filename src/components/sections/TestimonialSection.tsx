@@ -8,88 +8,34 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useTestimonials } from "@/hooks/useTestimonials";
 
-interface Testimonial {
-  id: number;
-  content: string;
-  client_name: string;
-  rating: number;
-}
-
-const baseTestimonials: Omit<Testimonial, "id">[] = [
-  {
-    content: "Tampilan web-nya classy banget! Flow-nya enak, navigasi dari halaman ke halaman mulus. Baru kali ini nemu web yang desainnya senyaman ini.",
-    client_name: "@EdyPamungkas",
-    rating: 5,
-  },
-  {
-    content: "Gacorr, ini web loading-nya cepet banget! Fitur-fitur yang ada di dalamnya juga fungsional dan nggak bikin bingung. Developer-nya juara sih.",
-    client_name: "@Baktisakti",
-    rating: 5,
-  },
-  {
-    content: "Suka banget sama interface-nya. Modern dan minimalis, bener-bener enak dilihat lama lama. User experiencenya dapet banget, nggak bikin pusing.",
-    client_name: "@Br4mast4",
-    rating: 4,
-  },
-  {
-    content: "awalnya buka web di desktop trus pas buka webnya di mobile, tampilannya tetep rapi. Responsive nya jempolan, nggak ada elemen yang kepotong. Mantap banget buat dev nya",
-    client_name: "@citradwi",
-    rating: 5,
-  },
-  {
-    content: "Struktur data di web ini rapi ya, mau cari info apa aja gampang ketemu. Backendnya kayaknya solid banget karena nggak pernah kerasa lag.",
-    client_name: "@Sari4330",
-    rating: 5,
-  },
-  {
-    content: "Desainnya estetik, pemilihan font sama warnanya bikin web ini kelihatan mahal. Clean banget, beda sama web lain yang terlalu ramai setuju banget sama yg kaya ginii",
-    client_name: "@Dikaprazz",
-    rating: 5,
-  },
-  {
-    content: "Pelayanan dari sistem webnya bagus, proses dari awal sampai bagian web paling akhir cepet banget nggak ada error. Problem solving-nya bener-bener dipikirin.",
-    client_name: "@Kurniaa_fian",
-    rating: 4,
-  },
-  {
-    content: "Fitur pencariannya akurat. Sering banget pakai web ini buat cari refrensi, dan sejauh ini performanya stabil banget. Sangat membantu produktivitas guee",
-    client_name: "@DanielDiJakarta",
-    rating: 5,
-  },
-  {
-    content: "Integrasi datanya cepet banget, update an terbaru selalu sinkron. Bener-bener terstruktur, pengerjaannya pasti niat banget nih yang buat.",
-    client_name: "@indahPratiwi",
-    rating: 5,
-  },
-  {
-    content: "Tampilannya simpel tapi fungsional. Jarang nemu web yang UI nya seintuitif ini. Overall, sangat memuaskan buat pengalaman pengguna kayak gue",
-    client_name: "@ahmdHad1",
-    rating: 5,
-  },
-];
-
-// Use testimonials directly with ratings defined per item
-const testimonials: Testimonial[] = baseTestimonials.map((t, i) => ({
-  id: i + 1,
-  ...t,
-}));
-
-export default function TestimoniSection() {
-  const { t } = useLanguage();
-  const [currentIndex, setCurrentIndex] = useState(2);
+export default function TestimonialSection() {
+  const { t, language } = useLanguage();
+  const { data: rawTestimonials, isLoading, error } = useTestimonials();
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
 
+  const testimonials = (rawTestimonials ?? [])
+    .slice()
+    .sort((a, b) => a.order - b.order)
+    .map((tst) => ({
+      id: tst.id,
+      content: tst.content[language],
+      client_name: tst.client_name,
+      rating: tst.rating,
+    }));
+
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  }, []);
+  }, [testimonials.length]);
 
   const handlePrev = useCallback(() => {
     setCurrentIndex(
       (prev) => (prev - 1 + testimonials.length) % testimonials.length,
     );
-  }, []);
+  }, [testimonials.length]);
 
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);
@@ -120,9 +66,25 @@ export default function TestimoniSection() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-[#0B122A]">
+        <p className="text-white/50">Memuat...</p>
+      </section>
+    );
+  }
+
+  if (error || testimonials.length === 0) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-[#0B122A]">
+        <p className="text-red-400">Gagal memuat testimoni.</p>
+      </section>
+    );
+  }
+
   return (
     <section
-      id="testimoni"
+      id="testimonial"
       className="w-full min-h-screen bg-[#0B122A] py-24 flex flex-col items-center justify-center overflow-hidden select-none"
     >
       {/* Title */}
@@ -139,7 +101,7 @@ export default function TestimoniSection() {
         onTouchStart={handleDragStart}
         onTouchEnd={handleDragEnd}
       >
-        {testimonials.map((testimoni, index) => {
+        {testimonials.map((testimonial, index) => {
           // Calculate relative position based on currentIndex
           let offset = index - currentIndex;
 
@@ -183,7 +145,7 @@ export default function TestimoniSection() {
 
           return (
             <div
-              key={testimoni.id}
+              key={testimonial.id}
               onClick={() => {
                 if (offset !== 0) setCurrentIndex(index);
               }}
@@ -200,17 +162,17 @@ export default function TestimoniSection() {
               <p
                 className={`text-center text-sm sm:text-base font-semibold leading-relaxed mb-6 ${textColor}`}
               >
-                {testimoni.content}
+                {testimonial.content}
               </p>
               <div className={`text-center font-bold mb-4 ${textColor}`}>
-                {testimoni.client_name}
+                {testimonial.client_name}
               </div>
               {/* Stars */}
               <div className="flex justify-center gap-1 mt-2">
                 {[...Array(5)].map((_, i) => (
                   <svg
                     key={i}
-                    className={`w-6 h-6 ${i < testimoni.rating ? "text-[#FFC107] fill-current" : "text-[#FFC107] stroke-current fill-transparent"}`}
+                    className={`w-6 h-6 ${i < testimonial.rating ? "text-[#FFC107] fill-current" : "text-[#FFC107] stroke-current fill-transparent"}`}
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"

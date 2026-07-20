@@ -4,173 +4,93 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { ChevronDown, ChevronUp } from "lucide-react";
-
-interface Project {
-  id: number;
-  titleKey: string;
-  descKey: string;
-  defaultTitle: string;
-  defaultDesc: string;
-  image: string;
-  category: string;
-}
-
-const projectsList: Project[] = [
-  {
-    id: 11,
-    titleKey: "proj_escape_citytour_title",
-    descKey: "proj_escape_citytour_desc",
-    defaultTitle: "SAKANCA ESCAPE × GEWD VACATION CITY TOUR",
-    defaultDesc:
-      "City Tour hasil kolaborasi Sakanca Escape × Gewd Vacation menyusuri spot tersembunyi diluar dari jalan Malioboro. Mulai dari kuliner hingga hidden gems tempat yang tidak banyak orang kunjungi.",
-    image: "/images/project/Escape.webp",
-    category: "Sakanca Escape",
-  },
-  {
-    id: 12,
-    titleKey: "proj_tech_pcbuild_title",
-    descKey: "proj_tech_pcbuild_desc",
-    defaultTitle: "SAKANCA TECH CUSTOM PC BUILD",
-    defaultDesc:
-      "Merakit komputer desktop sesuai kebutuhan pengguna dengan memperhatikan performa, estetika, dan manajemen kabel. Proyek ini mencakup pemasangan seluruh komponen, konfigurasi hardware, optimalisasi airflow, serta pengujian sistem untuk memastikan komputer berjalan stabil dan siap digunakan.",
-    image: "/images/project/CustomPC.webp",
-    category: "Sakanca Tech",
-  },
-  {
-    id: 13,
-    titleKey: "proj_tech_laptop_maintenance_title",
-    descKey: "proj_tech_laptop_maintenance_desc",
-    defaultTitle: "SAKANCA TECH LAPTOP MAINTENANCE",
-    defaultDesc:
-      "Melakukan pembongkaran laptop untuk proses pembersihan, penggantian thermal paste, upgrade komponen seperti SSD dan RAM, serta pemeriksaan kondisi hardware. Setiap perangkat diuji kembali setelah perawatan guna memastikan performa meningkat dan sistem bekerja secara optimal.",
-    image: "/images/project/LaptopMaintenance.webp",
-    category: "Sakanca Tech",
-  },
-  {
-    id: 14,
-    titleKey: "proj_porsimaptar_2025_title",
-    descKey: "proj_porsimaptar_2025_desc",
-    defaultTitle: "JUARA 2 LOMBA PORSIMAPTAR 2025",
-    defaultDesc:
-      "juara 2 lomba videografi yang diadakan oleh akademi kepolisian semarang pada tahun 2025 tingkat nasional",
-    image: "/images/project/Porsimaptar.webp",
-    category: "Sakanca Visual",
-  },
-  {
-    id: 16,
-    titleKey: "proj_sugi_ac_mobil_title",
-    descKey: "proj_sugi_ac_mobil_desc",
-    defaultTitle: "Sugi AC Mobil",
-    defaultDesc:
-      "Sugi AC Mobil adalah website company profile yang menampilkan informasi layanan servis AC mobil, galeri, testimoni, dan kontak untuk memudahkan pelanggan mengenal bisnis serta melakukan konsultasi. Website ini dibangun menggunakan Next.js, TypeScript, dan Tailwind CSS dengan deployment di Vercel, sehingga menghasilkan tampilan modern, responsif, cepat, dan SEO-friendly.",
-    image: "/images/project/SugiAcMobil.webp",
-    category: "Sakanca Dev",
-  },
-  {
-    id: 17,
-    titleKey: "proj_c_minor_title",
-    descKey: "proj_c_minor_desc",
-    defaultTitle: "C Minor",
-    defaultDesc:
-      "C Minor adalah website landing page yang dirancang untuk menyampaikan informasi mengenai komunitas secara profesional melalui desain yang sederhana, responsif, dan mudah digunakan. Website ini dikembangkan menggunakan HTML, CSS, dan JavaScript, kemudian dideploy menggunakan Vercel sehingga memiliki performa yang ringan dan mudah diakses dari berbagai perangkat.",
-    image: "/images/project/CMinor.webp",
-    category: "Sakanca Dev",
-  },
-  {
-    id: 18,
-    titleKey: "proj_mayarasa_unisba_title",
-    descKey: "proj_mayarasa_unisba_desc",
-    defaultTitle: "Lomba Video Kreatif UNISBA 2026",
-    defaultDesc:
-      "Lomba Video Kreatif yang di adakan oleh Universitas Islam Bandung Tahun 2026. Maya Rasa menceritakan tentang seorang perantau yang terjebak dalam judi online hingga menghabiskan uang yang dimilikinya. Saat keadaan mulai sulit, ia berusaha bertahan hidup dengan mencari pekerjaan di perantauan dan kembali menemukan semangat untuk bangkit.",
-    image: "/images/project/MayaRasa.webp",
-    category: "Sakanca Visual",
-  },
-  {
-    id: 19,
-    titleKey: "proj_bnn_2025_title",
-    descKey: "proj_bnn_2025_desc",
-    defaultTitle: "Lomba Video Pendek BNN 2025",
-    defaultDesc:
-      "Lomba Video Pendek yang di adakan oleh Badan Narkotika Nasional Tahun 2025. Ruang Silam menceritakan sepenggak realita anak muda yang dihadapkan oleh ujung skripsi dan patah hati, sehingga hampir tersesat ke narkoba hingga suara ibu membawanya pulang",
-    image: "/images/project/BNN.webp",
-    category: "Sakanca Visual",
-  },
-  {
-    id: 20,
-    titleKey: "proj_matic150_title",
-    descKey: "proj_matic150_desc",
-    defaultTitle: "TOP 5 Motor Matic 150cc Terbaik 2026 – Versi Sakanca Auto!",
-    defaultDesc:
-      "Pembuatan Video mengenai motor : Mencari motor matic 150cc yang tepat untuk kebutuhan harian maupun hobi di tahun 2026? Di video kali ini, kami telah mengurasi 5 pilihan motor matic kelas 150cc terbaik versi Sakanca Auto. Kami membahas keunggulan performa, desain, dan fitur-fitur yang membuat kelima motor ini layak menjadi pilihan utama bagi kamu tahun ini. ",
-    image: "/images/project/KelasMatic.webp",
-    category: "Sakanca Auto",
-  },
-  {
-    id: 21,
-    titleKey: "proj_bioleaf_title",
-    descKey: "proj_bioleaf_desc",
-    defaultTitle: "Juara 2 Lomba Videografi Bioleaf UNS Tahun 2025",
-    defaultDesc:
-      "Juara 2 Lomba Videografi yang diselenggarakan oleh HMP Biosfer FKIP UNS : BIOLEAF Tahun 2025.",
-    image: "/images/project/Bioleaf.webp",
-    category: "Sakanca Visual",
-  },
-];
+import { useProjects } from "@/hooks/useProjects";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { resolveImage } from "@/lib/api";
 
 export default function ProjectSection() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { data: projects, isLoading, error } = useProjects();
+  const { data: siteSettings } = useSiteSettings();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const handleScroll = useCallback(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
-
     const { scrollLeft, scrollWidth, clientWidth } = container;
     const maxScroll = scrollWidth - clientWidth;
     setScrollProgress(maxScroll <= 0 ? 0 : (scrollLeft / maxScroll) * 100);
   }, []);
 
+  const projectsList = React.useMemo(() => {
+    if (!projects) return [];
+    return projects
+      .slice()
+      .sort((a, b) => a.order - b.order)
+      .map((p) => ({
+        id: p.id,
+        name: p.name[language],
+        desc: p.description[language],
+        image: resolveImage(p.thumbnail),
+        category: p.service?.name ?? "",
+      }));
+  }, [projects, language]);
+
+  // Recalculate progress saat data project selesai dimuat atau window di-resize
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    container.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => container.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
+    window.addEventListener("resize", handleScroll);
+    return () => window.removeEventListener("resize", handleScroll);
+  }, [handleScroll, projectsList]);
+
+  if (isLoading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-black">
+        <p className="text-white/50">Memuat...</p>
+      </section>
+    );
+  }
+
+  if (error || !projects) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-black">
+        <p className="text-red-400">Gagal memuat data project.</p>
+      </section>
+    );
+  }
 
   return (
     <section
       id="project"
       className="w-full min-h-screen py-24 flex flex-col items-center justify-center select-none relative overflow-hidden"
-      style={{
-        backgroundImage: "url('/images/project/Porsimaptar.webp')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
     >
-      <div className="absolute inset-0 bg-black/70 z-0 pointer-events-none" />
+      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+        {siteSettings?.projects_section_bg ? (
+          <Image
+            src={resolveImage(siteSettings.projects_section_bg)}
+            alt="Background Projects"
+            fill
+            className="object-cover opacity-85"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-black" />
+        )}
+        <div className="absolute inset-0 bg-black/70" />
+      </div>
+
       <h2 className="relative z-10 text-center font-bold text-4xl sm:text-5xl tracking-[0.35em] uppercase text-[#E6DAC3] mb-16 drop-shadow-[0_0_15px_rgba(230,218,195,0.4)] px-6">
-        PROJECTS
+        {t("project_title")}
       </h2>
 
+      {/* CONTAINER CARDS DENGAN EVENT ON-SCROLL DEDIKATED */}
       <div
         ref={scrollContainerRef}
+        onScroll={handleScroll}
         className="relative z-10 w-full flex overflow-x-auto gap-8 py-6 px-8 snap-x snap-mandatory no-scrollbar scroll-smooth"
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         {projectsList.map((project) => {
-          const title =
-            t(project.titleKey) !== project.titleKey
-              ? t(project.titleKey)
-              : project.defaultTitle;
-          const desc =
-            t(project.descKey) !== project.descKey
-              ? t(project.descKey)
-              : project.defaultDesc;
-
           return (
             <div
               key={project.id}
@@ -196,7 +116,7 @@ export default function ProjectSection() {
               <div className="relative shrink-0 w-full h-[180px] sm:h-[220px] rounded-[24px] overflow-hidden mb-6">
                 <Image
                   src={project.image}
-                  alt={title}
+                  alt={project.name}
                   fill
                   className="object-cover"
                 />
@@ -204,10 +124,10 @@ export default function ProjectSection() {
 
               <div className="w-full flex flex-col flex-grow items-center text-center">
                 <h3 className="w-full font-bold italic text-white text-lg sm:text-xl uppercase mb-4 tracking-wide leading-tight px-2 h-[80px] sm:h-[90px] flex-shrink-0 drop-shadow-md">
-                  {title}
+                  {project.name}
                 </h3>
                 <p className="text-white/90 text-xs sm:text-sm leading-relaxed px-3 pb-6">
-                  {desc}
+                  {project.desc}
                 </p>
                 <p className="text-[#E6DAC3] font-semibold italic text-xs sm:text-sm tracking-wide pb-2 mt-auto drop-shadow-sm">
                   -{project.category}-
@@ -218,6 +138,7 @@ export default function ProjectSection() {
         })}
       </div>
 
+      {/* INDIKATOR SCROLLBAR TRACK & THUMB */}
       <div className="relative z-10 mt-8 flex justify-center w-full px-6">
         <div className="w-[180px] sm:w-[240px] h-[6px] bg-white/10 rounded-full overflow-hidden relative">
           <div
@@ -225,7 +146,6 @@ export default function ProjectSection() {
             style={{
               width: "35%",
               left: `${scrollProgress * 0.65}%`,
-              transition: "left 80ms ease-out",
             }}
           />
         </div>
@@ -243,7 +163,7 @@ export default function ProjectSection() {
           <span className="lang-text">{t("btn_back")}</span>
         </a>
         <a
-          href="#testimoni"
+          href="#testimonial"
           className="group w-max px-6 py-3.5 flex items-center justify-center gap-2 bg-[#1c64ff] hover:bg-[#1c64ff]/90 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(28,100,255,0.3)] hover:shadow-[0_0_30px_rgba(28,100,255,0.5)] transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 cursor-pointer text-xs sm:text-sm tracking-widest uppercase"
         >
           <ChevronDown

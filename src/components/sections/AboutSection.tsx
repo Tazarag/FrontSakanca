@@ -3,14 +3,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useAbout } from "@/hooks/useAbout";
 import { useLanguage } from "@/context/LanguageContext";
+import { resolveImage } from "@/lib/api";
 
 export default function About() {
-  const { t } = useLanguage();
+  const { data: about, isLoading, error } = useAbout();
+  const { t, language } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const AboutRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isLoading || !about) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -18,22 +23,39 @@ export default function About() {
           observer.disconnect();
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.1 },
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    if (AboutRef.current) {
+      observer.observe(AboutRef.current);
     }
+
     return () => observer.disconnect();
-  }, []);
+  }, [isLoading, about]);
+
+  if (isLoading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center">
+        <p className="text-white/50">Memuat...</p>
+      </section>
+    );
+  }
+
+  if (error || !about) {
+    return (
+      <section className="min-h-screen flex items-center justify-center">
+        <p className="text-red-400">Gagal memuat data tentang kami.</p>
+      </section>
+    );
+  }
 
   return (
     <div
       id="about"
-      ref={sectionRef}
+      ref={AboutRef}
       className="w-full min-h-screen flex flex-col justify-center px-8 md:px-24 py-20 overflow-hidden bg-cover bg-center bg-no-repeat relative"
       style={{
-        backgroundImage: "url('/images/background/About/bgAbout.webp')",
+        backgroundImage: `url('${resolveImage(about?.background_image)}')`,
       }}
     >
       <div className="absolute inset-0 bg-linear-to-b from-black/90 via-[#0c1947]/50 to-black/95 z-0"></div>
@@ -44,11 +66,15 @@ export default function About() {
             style={{ animationDelay: isVisible ? "200ms" : "0ms" }}
           >
             <Image
-              src="/images/logo/logoSakanca.webp"
+              src={
+                about?.logo
+                  ? resolveImage(about.logo)
+                  : resolveImage("/storage/logos/LogoSakanca.webp") // BUNGKUS DENGAN resolveImage()
+              }
               alt="Sakanca Logo"
               width={256}
               height={256}
-              className="w-full h-full object-contain rounded-2xl"
+              className="w-full h-full object-contain rounded-3xl"
             />
           </div>
           <div
@@ -56,9 +82,9 @@ export default function About() {
             style={{ animationDelay: isVisible ? "800ms" : "0ms" }}
           >
             <h1 className="text-[#E6DAC3] font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.4] tracking-widest uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-              <span className="lang-text">{t("about_title1")}</span>
+              <span className="lang-text">{about?.title1}</span>
               <br />
-              <span className="lang-text">{t("about_title2")}</span>
+              <span className="lang-text">{about?.title2}</span>
             </h1>
           </div>
         </div>
@@ -68,9 +94,7 @@ export default function About() {
           style={{ animationDelay: isVisible ? "1400ms" : "0ms" }}
         >
           <p className="text-gray-300/90 text-sm sm:text-base md:text-lg leading-[2.2] text-justify md:text-left font-medium tracking-widest drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-            <span className="lang-text">
-              {t("about_desc1")} {t("about_desc2")}
-            </span>
+            <span className="lang-text">{about?.description[language]}</span>
           </p>
         </div>
 

@@ -3,42 +3,35 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const slides = [
-  {
-    src: "/images/background/Hero/bgHero1.webp",
-    alt: "Background 1",
-    zoomType: "in",
-  },
-  {
-    src: "/images/background/Hero/bgHero2.webp",
-    alt: "Background 2",
-    zoomType: "out",
-  },
-  {
-    src: "/images/background/Hero/bgHero3.webp",
-    alt: "Background 3",
-    zoomType: "in",
-  },
-];
+interface Slide {
+  src: string;
+  alt: string;
+  zoomType: "in" | "out";
+}
+
+interface HeroSlideshowProps {
+  slides: Slide[];
+}
 
 const SLIDE_DURATION = 2000;
 const TRANSITION_DURATION = 600;
 
-export default function HeroSlideshow() {
+export default function HeroSlideshow({ slides }: HeroSlideshowProps) {
   const [current, setCurrent] = useState(0);
   const [prev, setPrev] = useState<number | null>(null);
 
   useEffect(() => {
+    if (slides.length <= 1) return;
     const interval = setInterval(() => {
       setPrev(current);
       setCurrent((prevCurrent) => (prevCurrent + 1) % slides.length);
-      setTimeout(() => {
-        setPrev(null);
-      }, TRANSITION_DURATION);
+      setTimeout(() => setPrev(null), TRANSITION_DURATION);
     }, SLIDE_DURATION);
 
     return () => clearInterval(interval);
-  }, [current]);
+  }, [current, slides.length]);
+
+  if (slides.length === 0) return null;
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden bg-black">
@@ -46,9 +39,7 @@ export default function HeroSlideshow() {
         <div
           key={`slide-container-${prev}`}
           className="absolute inset-0 z-0"
-          style={{
-            animation: `fadeOut ${TRANSITION_DURATION}ms ease-in-out forwards`,
-          }}
+          style={{ animation: `fadeOut ${TRANSITION_DURATION}ms ease-in-out forwards` }}
         >
           <div
             className="absolute inset-0"
@@ -69,9 +60,7 @@ export default function HeroSlideshow() {
       <div
         key={`slide-container-${current}`}
         className="absolute inset-0 z-10"
-        style={{
-          animation: `fadeIn ${TRANSITION_DURATION}ms ease-in-out forwards`,
-        }}
+        style={{ animation: `fadeIn ${TRANSITION_DURATION}ms ease-in-out forwards` }}
       >
         <div
           className="absolute inset-0"

@@ -3,9 +3,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import HeroSlideshow from "@/components/ui/HeroSlideshow";
 import { useLanguage } from "@/context/LanguageContext";
+import { useHero } from "@/hooks/useHero";
+import { resolveImage } from "@/lib/api";
 
 export default function HeroSection() {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+  const { data: hero, isLoading, error } = useHero();
   const heroRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
@@ -19,12 +22,40 @@ export default function HeroSection() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="relative min-h-screen w-full flex flex-col justify-center items-start overflow-hidden bg-black px-6 sm:px-12 max-w-7xl mx-auto animate-pulse">
+        <div className="h-16 sm:h-24 w-3/4 bg-white/10 rounded-lg mb-5" />
+        <div className="h-16 sm:h-24 w-1/2 bg-white/10 rounded-lg mb-8" />
+        <div className="h-4 w-full max-w-xl bg-white/10 rounded mb-3" />
+        <div className="h-4 w-2/3 max-w-xl bg-white/10 rounded mb-12" />
+        <div className="h-14 w-40 bg-white/10 rounded-2xl" />
+      </div>
+    );
+  }
+
+  if (error || !hero) {
+    return (
+      <div className="relative min-h-screen w-full flex flex-col justify-center items-center overflow-hidden bg-black px-6 text-center">
+        <p className="text-white/60 text-sm tracking-wide">
+          {error ?? "Konten Hero belum tersedia."}
+        </p>
+      </div>
+    );
+  }
+
+  // hero sudah pasti ada di titik ini (sudah lolos loading & error check di atas)
+  const resolvedSlides = hero.background_images.map((img) => ({
+    ...img,
+    src: resolveImage(img.src),
+  }));
+
   return (
     <div
       ref={heroRef}
       className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden"
     >
-      <HeroSlideshow />
+      <HeroSlideshow slides={resolvedSlides} />
 
       <div
         className="absolute w-[600px] h-[600px] rounded-full pointer-events-none z-10 animate-hero-fade-in"
@@ -73,7 +104,7 @@ export default function HeroSection() {
             className="block text-white lang-text"
             style={{ textShadow: "0 0 80px rgba(255,255,255,0.08)" }}
           >
-            {t("hero_title")}
+            {hero.title1}
           </span>
           <span
             className="block mt-2 lang-text"
@@ -87,7 +118,7 @@ export default function HeroSection() {
               animation: "gradientShift 5s ease infinite",
             }}
           >
-            {t("hero_title2")}
+            {hero.title2}
           </span>
         </h1>
 
@@ -100,12 +131,12 @@ export default function HeroSection() {
         />
 
         <p className="text-lg sm:text-xl text-gray-300/90 max-w-xl mb-12 leading-relaxed font-medium tracking-wide lang-text animate-hero-slide-up">
-          {t("hero_subtitle")}
+          {hero.subtitle[language]}
         </p>
 
         <div className="animate-hero-slide-up">
           <a
-            href="#about"
+            href={hero.cta_primary.url}
             className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-9 py-4 font-bold text-white text-sm tracking-wide cursor-pointer select-none"
             style={{
               background: "linear-gradient(135deg, #4338ca 0%, #7c3aed 100%)",
@@ -127,7 +158,9 @@ export default function HeroSection() {
             }}
           >
             <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 pointer-events-none" />
-            <span className="lang-text relative z-10">{t("hero_cta")}</span>
+            <span className="lang-text relative z-10">
+              {hero.cta_primary.text[language]}
+            </span>
             <svg
               className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-200"
               fill="none"
@@ -153,8 +186,7 @@ export default function HeroSection() {
           className="w-px h-10 origin-top"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(255,255,255,0.5), transparent)",
-            animation: "scrollPulse 2.2s ease-in-out infinite",
+              "linear-gradient(to bottom, rgba(255,255,255,0.4), transparent)",
           }}
         />
       </div>
