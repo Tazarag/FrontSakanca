@@ -69,7 +69,7 @@ export default function About() {
               src={
                 about?.logo
                   ? resolveImage(about.logo)
-                  : resolveImage("/storage/logos/LogoSakanca.webp") // BUNGKUS DENGAN resolveImage()
+                  : resolveImage("/storage/logos/logoSakanca.webp")
               }
               alt="Sakanca Logo"
               width={256}

@@ -36,7 +36,7 @@ export default function Navbar() {
   // Resolusi logo dari API atau fallback ke logo bawaan
   const logoUrl = settings?.site_logo
     ? resolveImage(settings.site_logo)
-    : resolveImage("/storage/logos/LogoSakanca.webp");
+    : resolveImage("/storage/logos/logoSakanca.webp");
 
   const brandName = settings?.site_name || "Sakanca Alliance";
 
