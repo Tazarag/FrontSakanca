@@ -75,7 +75,7 @@ export default function Navbar() {
               ["#about", t("nav_about")],
               ["#services", t("nav_service")],
               ["#project", t("nav_project")],
-              ["#testimoni", t("nav_testimonial")],
+              ["#testimonial", t("nav_testimonial")],
               ["#profile", t("nav_contact")],
               ["#gallery", t("nav_gallery")],
             ] as [string, string][]

@@ -136,7 +136,7 @@ export default function HeroSection() {
 
         <div className="animate-hero-slide-up">
           <a
-            href={hero.cta_primary.url}
+            href="#about"
             className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-9 py-4 font-bold text-white text-sm tracking-wide cursor-pointer select-none"
             style={{
               background: "linear-gradient(135deg, #4338ca 0%, #7c3aed 100%)",

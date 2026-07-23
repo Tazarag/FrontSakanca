@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sakanca — Frontend (Front-Sakanca)
 
-## Getting Started
+Website company profile **Sakanca Alliance** — menampilkan profil perusahaan, enam sub-brand (Sakanca Visual, Auto, Escape, Tech, Dev, Pet), portofolio project, tim, dan testimoni klien. Mendukung 3 bahasa (Indonesia, English, Japanese).
 
-First, run the development server:
+Dikembangkan sebagai final project mata kuliah Rekayasa Web, dipasangkan dengan [BackSakanca](https://github.com/valeriaanaf/BackSakanca) sebagai REST API backend.
+
+---
+
+## Tech Stack
+
+| Layer | Teknologi |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Bahasa | TypeScript |
+| Styling | Tailwind CSS |
+| Animasi | Framer Motion |
+| Mode Build | Static Export (`output: "export"`) |
+
+---
+
+## Fitur Utama
+
+- Seluruh konten (Hero, About, Services, Projects, Team, Testimonials, Gallery) diambil langsung dari REST API backend, bukan data statis
+- Switch bahasa ID / EN / JPN secara real-time tanpa reload halaman
+- Static export — hasil build berupa file HTML/CSS/JS murni, ringan di-hosting di mana saja
+- Loading & error state di setiap section yang fetch data
+
+---
+
+## Setup Lokal
+
+### 1. Clone repository
+
+```bash
+git clone https://github.com/valeriaanaf/Front-Sakanca.git
+cd Front-Sakanca
+```
+
+### 2. Install dependency
+
+```bash
+npm install
+```
+
+### 3. Buat file environment lokal
+
+Buat file baru `.env.local` di root project:
+
+```dotenv
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+```
+
+Arahkan ke URL backend (BackSakanca) yang sedang berjalan — lokal (`http://127.0.0.1:8000`) atau production.
+
+### 4. Jalankan development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka `http://localhost:3000` di browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> **Catatan:** pastikan backend (BackSakanca) sudah berjalan lebih dulu, dan domain frontend ini sudah diizinkan di `config/cors.php` backend.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Build untuk production (opsional, untuk testing static export)
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Hasil build statis akan tersedia di folder `/out`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment Variables
 
-## Deploy on Vercel
+| Variable | Wajib | Keterangan |
+|---|---|---|
+| `NEXT_PUBLIC_API_URL` | Ya | Base URL REST API backend, contoh: `https://backsakanca-production.up.railway.app` |
+| `NEXT_PUBLIC_SITE_URL` | Opsional | Digunakan untuk generate `sitemap.xml`, contoh: `https://sakanca.com` |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Struktur Folder
+
+```
+src/
+├── app/                     # Routing Next.js App Router, layout, sitemap, robots
+├── components/
+│   ├── sections/            # Satu file per section homepage
+│   │   ├── HeroSection.tsx
+│   │   ├── AboutSection.tsx
+│   │   ├── ServiceSection.tsx
+│   │   ├── DetailedServiceSection.tsx
+│   │   ├── ProjectSection.tsx
+│   │   ├── ProfileSection.tsx      # Team Members
+│   │   ├── TestimonialSection.tsx
+│   │   └── GallerySection.tsx
+│   ├── layout/               # Navbar, Footer
+│   └── ui/                   # Komponen reusable (mis. HeroSlideshow)
+├── context/
+│   └── LanguageContext.tsx   # State bahasa aktif + teks UI statis (t())
+├── hooks/                    # Satu hook per resource API (useHero, useServices, dst)
+│   └── useApiData.ts         # Hook generik: loading, error, data
+├── lib/
+│   ├── api.ts                 # HTTP client + resolveImage() untuk path storage
+│   └── serviceUiMeta.ts       # Mapping slug service → icon & warna
+├── locales/                   # id.json, en.json, jpn.json — teks UI statis (navbar, tombol, dll)
+└── types/
+    └── index.ts               # TypeScript interface, cocok 1:1 dengan response API backend
+```
+
+### Konsep Penting: Dua Jenis Teks
+
+| Jenis | Sumber | Contoh |
+|---|---|---|
+| Teks UI statis (navbar, tombol, judul section) | `locales/*.json`, diakses lewat `t('key')` | "Back", "View Gallery" |
+| Konten dinamis (deskripsi, judul konten, nama) | API backend, tipe `Localized` (`{ID, EN, JPN}`) | `about.description[language]` |
+
+Path gambar dari backend selalu di-resolve lewat `resolveImage()` di `lib/api.ts` sebelum dipakai di komponen `<Image>`.
+
+---
+
+## Deployment
+
+| Environment | URL |
+|---|---|
+| Production | `https://front-sakanca.vercel.app` |
+
+Deploy otomatis lewat Vercel setiap push ke branch `main`. Domain custom (`sakanca.com`) menyusul setelah proses pembelian domain selesai.
